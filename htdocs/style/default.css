@@ -1,14 +1,16 @@
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
+    background-color: #455A64;
+    color: white;
 }
 
 .wrapper {
     max-width: 750px;
     min-height: 100vh;
-    margin: 10px auto;
-    border: 1px solid #333333;
-    box-shadow: 3px 3px 10px 0 #333333;
+    margin: 10px auto 70px auto;
+    border: 1px solid white;
+    background-color: #607D8B;
 }
 
 .header {
@@ -28,10 +30,12 @@ body {
 }
 
 .track-item {
+    position: relative;
     display: block;
     box-sizing: border-box;
     padding: 10px;
-    color: black;
+    color: white;
+    overflow: hidden;
 }
 
 .track-item::after {
@@ -46,15 +50,15 @@ body {
     padding-top: 10%;
     box-sizing: border-box;
     overflow: hidden;
-    border: 1px solid #333333;
+    border: 1px solid white;
 }
 
 .track-item {
-    transition: background-color 0.3s;
+    transition: background-color 0.1s;
 }
 
 .track-item:hover {
-    background-color: #EEEEEE;
+    background-color: #78909C;
 }
 .cover {
     width: 100%;
@@ -63,8 +67,6 @@ body {
     left: 0;
     top: 0;
     object-fit: cover;
-    margin-left: 50%;
-    transform: translateX(-50%);
 }
 
 .cover-overlay {
@@ -75,13 +77,30 @@ body {
     right: 0;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
+    transition: overlay 0.1s;
 }
 
 .track-item:hover .cover-overlay {
     opacity: 1;
 }
 
+.background-cover {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    transform: translateY(-50%);
+    filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.track-item:hover .background-cover {
+    opacity: 0.5;
+}
+
 .info-box {
+    position: relative;
     width: 80%;
     box-sizing: border-box;
     padding: 5px 15px 5px 15px;
@@ -99,32 +118,61 @@ body {
     font-weight: normal;
 }
 
-hr {
-    margin: 0 3px 0 3px;
+.duration-box {
+    position: relative;
 }
 
 .player {
     position: fixed;
+    box-sizing: border-box;
     width: 100%;
     bottom: 0;
     padding: 5px;
-    background-color: white;
+    background-color: #455A64;
     border-top: solid 1px #333333;
 }
 
 #now-playing-cover {
     width: 5%;
     max-width: 50px;
+    min-height: 50px;
+    border: 1px solid white;
+    margin: 5px;
 }
 
 .now-playing-text {
-    width: 25%;
-    padding: 0 5px;
+    width: 50%;
+    padding: 10px;
     box-sizing: border-box;
 }
 
+.now-playing-text h5 {
+    font-weight: normal;
+}
+
+.now-playing-progress {
+    background-color: #607D8B;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 250ms linear;
+    z-index: -1;
+}
+
+#play-button {
+    position: absolute;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+    color: white;
+}
+
+#play-button i {
+    font-size: 50px;
+}
+
 #audio {
-    width: 70%;
+    display: none;
 }
 
 .one-line {
