@@ -37,52 +37,25 @@ $(document).ready(function () {
 });
 
 function setup() {
-    let select = $("#playlist-select");
+    $("#playlist-select").change(function () {
+        let playlist = this.value;
 
-    select.change(function () {
-        display(playlists[this.value].tracks);
-    });
-
-    $("#search").on("input", function () {
-
-        displayAll($("#search").val());
-
-    });
-
-    let allSelect = $("#show-all");
-
-    allSelect.click(function () {
-
-        $("#playlist-select").prop("disabled", true);
-        $("#search").prop("disabled", true);
-
-        displayAll();
-
-    });
-
-    $("#show-playlist").click(function () {
-
-        $("#search").prop("disabled", true);
-
-        let playlistSelect = $("#playlist-select");
-        playlistSelect.prop("disabled", false);
-        display(playlists[playlistSelect.val()].tracks);
-
-    });
-
-    $("#show-search").click(function () {
-
-        $("#playlist-select").prop("disabled", true);
-
-        let search = $("#search");
-        search.prop("disabled", false);
-        displayAll(search.val());
-
+        if (playlist === ".all") {
+            displayAll();
+        } else {
+            display(playlists[this.value].tracks);
+        }
     });
 
     $("#order-select").change(function () {
 
         display(currentTracks);
+
+    });
+
+    $("#search").on("input", function () {
+
+        displayAll($("#search").val());
 
     });
 
@@ -94,7 +67,7 @@ function setup() {
             playbackContext.index++;
             let track = playbackContext.tracks[playbackContext.index];
             $("#audio").attr("src", track.stream_url + "?client_id=LvWovRaJZlWCHql0bISuum8Bd2KX79mb");
-            onTrackChange(track);
+            onTrackChange.call($("[track-index='" + playbackContext.index + "']"), track);
         }
 
     });
@@ -102,7 +75,7 @@ function setup() {
     audio.on("timeupdate", function () {
 
         let audioNow = audio.get(0);
-        $(".now-playing-progress").eq(0).css("width", (audioNow.currentTime / audioNow.duration * 100) + "%");
+        $(".progress-bar").css("width", (audioNow.currentTime / audioNow.duration * 100) + "%");
 
     });
 
@@ -130,7 +103,7 @@ function setup() {
 
     });
 
-    allSelect.click();
+    displayAll();
 }
 
 function displayAll(query = undefined) {
@@ -160,50 +133,41 @@ function display(tracks) {
 
         previousId = track.id;
 
+        let artworkUrl = getArtworkUrl(track);
+
         let trackElement = $("<a>", {
             href: "#",
             "track-index": index++,
-            "class": "track-item"
-        });
-        let coverBox = $("<div>", {
-            "class": "cover-box left"
-        });
-        let infoBox = $("<div>", {
-            "class": "info-box left"
-        });
-        let durationBox = $("<div>", {
-            "class": "duration-box right clear-after"
-        });
+            "class": "list-group-item list-group-item-action d-flex flex-row p-2"
+        }).append(
+            $("<div>", {
+                "class": "mr-2"
+            }).append(
+                $("<img>", {
+                    src: artworkUrl,
+                    "class": "rounded"
+                })
+            ),
+            $("<div>", {
+                "class": "mr-auto text-truncate"
+            }).append(
+                $("<strong>", {
+                    html: track.title
+                }),
+                $("<div>", {
+                    html: track.user.username,
+                    "class": "text-muted"
+                })
+            ),
+            $("<div>", {
+                "class": "ml-2"
+            }).append(
+                $("<span>", {
+                    html: new Date(track.duration).toISOString().substr(14, 5)
+                })
+            )
+        );
 
-        let artworkUrl = getArtworkUrl(track);
-        coverBox.append($("<img>", {
-            src: artworkUrl,
-            "class": "cover"
-        }));
-        let overlay = $("<div>", {
-            "class": "cover-overlay"
-        });
-        overlay.append($("<i>", {
-            html: "play_arrow",
-            "class": "icon material-icons"
-        }));
-        coverBox.append(overlay);
-
-        infoBox.append($("<h3>", {
-            html: track.title,
-            "class": "one-line"
-        }), $("<h4>", {
-            html: track.user.username,
-            "class": "one-line"
-        }));
-        durationBox.append($("<span>", {
-            html: new Date(track.duration).toISOString().substr(14, 5)
-        }));
-
-        trackElement.append($("<img>", {
-            src: artworkUrl,
-            "class": "background-cover"
-        }), coverBox, infoBox, durationBox);
         content.append(trackElement);
 
         trackElement.click(function () {
@@ -214,7 +178,7 @@ function display(tracks) {
             };
             let track = currentTracks[playbackContext.index];
             $("#audio").attr("src", track.stream_url + "?client_id=LvWovRaJZlWCHql0bISuum8Bd2KX79mb");
-            onTrackChange(track);
+            onTrackChange.call(this, track);
             return false;
 
         });
@@ -224,6 +188,9 @@ function display(tracks) {
 }
 
 function onTrackChange(track) {
+    $(".active").removeClass("active");
+    $(this).addClass("active");
+
     $("#now-playing-title").html(track.title);
     $("#now-playing-artist").html(track.user.username);
     $("#now-playing-cover").attr("src", getArtworkUrl(track));

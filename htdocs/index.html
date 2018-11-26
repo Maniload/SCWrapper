@@ -1,50 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>SoundCloud</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="style/bootstrap.min.css" rel="stylesheet">
     <link href="style/default.css" rel="stylesheet">
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/main.js"></script>
 </head>
-<body>
-    <div class="wrapper">
-        <div class="header">
-            <h1 class="left">SoundCloud Wrapper</h1>
-            <div class="right">
-                <table>
-                    <tr>
-                        <td>
-                            <input id="show-all" type="radio" name="show" value="all">
-                            <label for="show-all">Show All</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input id="show-playlist" type="radio" name="show" value="playlist">
-                            <label for="show-playlist">Show By Playlist</label>
-                        </td>
-                        <td>
-                            <select title="Playlist" id="playlist-select" disabled></select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input id="show-search" type="radio" name="show" value="search">
-                            <label for="show-search">Search</label>
-                        </td>
-                        <td>
-                            <input id="search" type="text" disabled>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Order:
-                        </td>
-                        <td>
-                            <select title="Order" id="order-select">
+<body style="padding-top: 20px; padding-bottom: calc(69px + 1rem)">
+    <div class="container">
+        <div class="card border-success">
+            <div class="card-header bg-dark">
+                <h1 class="text-center card-title">SoundCloud Wrapper</h1>
+                <div class="row mb-2">
+                    <div class="form-inline mx-auto">
+                        <div class="col-12 col-sm-auto form-group">
+                            <label class="mr-2" for="playlist-select">Show</label>
+                            <select class="form-control" title="Playlist" id="playlist-select">
+                                <option value=".all"># All</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-auto form-group">
+                            <label class="mr-2" for="search">Search</label>
+                            <input class="form-control" id="search" type="text">
+                        </div>
+                        <div class="col-12 col-sm-auto form-group">
+                            <label class="mr-2" for="order-select">Order:</label>
+                            <select class="form-control" title="Order" id="order-select">
                                 <option value="alpha">Alphabetical (A->Z)</option>
                                 <option value="alpha-reverse">Alphabetical (Z->A)</option>
                                 <option value="release">Release Date (Old->New)</option>
@@ -54,25 +40,41 @@
                                 <option value="duration">Duration (Short->Long)</option>
                                 <option value="duration-reverse">Duration (Long->Short)</option>
                             </select>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content" class="list-group list-group-flush"></div>
+        </div>
+        <div class="fixed-bottom bg-secondary">
+            <div class="container">
+                <div class="row p-2">
+                    <div class="col-9 col-sm-4 order-sm-10">
+                        <div class="d-flex flex-row align-items-center">
+                            <img id="now-playing-cover" class="rounded mr-2 bg-white">
+                            <div class="now-playing-text text-truncate">
+                                <strong id="now-playing-title"></strong>
+                                <div id="now-playing-artist" class="text-muted"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3 col-sm-8 d-flex align-items-center text-right text-sm-left">
+                        <a id="play-button" href class="mr-2">
+                            <i class="material-icons">play_arrow</i>
+                        </a>
+                        <div class="progress w-100 my-auto bg-light d-none d-sm-flex">
+                            <div class="progress-bar bg-dark" style="width: 0"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <hr class="clear">
-        <div id="content" class="content"></div>
     </div>
-    <div class="player">
-        <div class="now-playing-progress" style="width: 0"></div>
-        <img id="now-playing-cover" class="left">
-        <div class="left now-playing-text">
-            <h4 id="now-playing-title" class="one-line">?</h4>
-            <h5 id="now-playing-artist" class="one-line">?</h5>
-        </div>
-        <a id="play-button" href>
-            <i class="material-icons">play_arrow</i>
-        </a>
-        <audio class="right" controls autoplay id="audio"></audio>
-    </div>
+
+    <audio class="d-none" autoplay id="audio"></audio>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
